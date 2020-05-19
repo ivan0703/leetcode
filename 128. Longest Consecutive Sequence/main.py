@@ -1,5 +1,4 @@
 from typing import List
-import math
 
 class Solution:
     def count(self, key, uset):
