@@ -3,7 +3,7 @@ import bisect
 
 class Solution:
     # TLE
-    def oddEvenJumps(self, A: List[int]) -> int:
+    def oddEvenJumps_v2(self, A: List[int]) -> int:
         N = len(A)
         dp_odd  = [False] * (N-1) + [True]
         dp_even = [False] * (N-1) + [True]
@@ -27,6 +27,36 @@ class Solution:
             else:
                 vals.insert(lo, [A[i],i])
         return res
+
+    def oddEvenJumps(self, A: List[int]) -> int:
+
+        N = len(A)
+        dp_odd  = [0] * N
+        dp_even = [0] * N
+
+        Aasc = sorted([(v,i) for (i,v) in enumerate(A)])
+        st = []
+        for j in range(len(Aasc)):
+            while st and st[-1] < Aasc[j][1]:
+                dp_odd[st[-1]] = Aasc[j][1]
+                st.pop()
+            st.append(Aasc[j][1])
+        
+        Adec = sorted([(-v,i) for (i,v) in enumerate(A)])
+        st = []
+        for j in range(len(Adec)):
+            while st and st[-1] < Adec[j][1]:
+                dp_even[st[-1]] = Adec[j][1]
+                st.pop()
+            st.append(Adec[j][1])
+
+        odd  = [0] * (N-1) + [1]
+        even = [0] * (N-1) + [1]
+        for j in range(N-1)[::-1]:
+            odd[j]  = even[dp_odd[j]]
+            even[j] = odd[dp_even[j]]
+
+        return sum(odd)
 
 if __name__ == "__main__":
     sol = Solution()
