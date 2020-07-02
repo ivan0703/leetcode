@@ -6,10 +6,10 @@ class Solution:
             return -float('Inf')
 
         ans = nums[0]
-        dp = [nums[0]] + [0] * (len(nums)-1)
-        for i in range(1,len(dp)):
-            dp[i] = max(nums[i], dp[i-1]+nums[i])
-            ans = max(ans, dp[i])
+        dp = nums[0] # max sub-array sum ended at i
+        for i in range(1,len(nums)):
+            dp = max(nums[i], dp+nums[i])
+            ans = max(ans, dp)
         return ans
 
 if __name__ == "__main__":
