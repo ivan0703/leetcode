@@ -2,12 +2,44 @@
 #include <vector>
 #include <algorithm>
 #include <queue>
+#include <map>
 
 using namespace std;
 
 class Solution {
 public:
     vector<int> busiestServers(int k, vector<int>& arrival, vector<int>& load) {
+        int N = arrival.size();
+        map<int,int> jobs;
+        vector<int> serv_load(k,0);
+        vector<int> cnt(k,0);
+        for(int i=0; i<N+k-1; i++) {
+            if(i<N) {
+                jobs[arrival[i]] = load[i];
+            }
+
+            int idx = i % k;
+            auto it = jobs.lower_bound(serv_load[idx]);
+            while(it != jobs.end()) {
+                serv_load[idx] = it->first + it->second;
+                cnt[idx]++;
+                jobs.erase(it->first);
+                it = jobs.lower_bound(serv_load[idx]);
+            }
+        }
+
+        vector<int> ret;
+        int max_val = *max_element(cnt.begin(),cnt.end());
+        for(int i=0; i<cnt.size(); i++) {
+            if(cnt[i]==max_val) {
+                ret.push_back(i);
+            }
+        }
+
+        return ret;
+    }
+
+    vector<int> busiestServers2(int k, vector<int>& arrival, vector<int>& load) {
         int N = arrival.size();
         vector<int> job_cnt(k, 0);
         vector<int> busy_end_time(k,0);
