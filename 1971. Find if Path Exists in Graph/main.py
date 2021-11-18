@@ -15,6 +15,9 @@ class Solution:
         return False
 
     def validPath(self, n: int, edges: List[List[int]], start: int, end: int) -> bool:
+        if start == end or [start,end] in edges:
+            return True
+            
         # create graph
         g = defaultdict(set)
         for e in edges:
